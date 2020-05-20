@@ -4,9 +4,30 @@ from glob import glob
 import pandas as pd 
 import os 
 
-       
+# Biology protocol 
 
+# in Total, 3 x 2 amplicons are sequenced :  
 
+# FORWARD_N1 - INSERT_VIRUS - RT_PRIMER_N1 - BARCODE - REVERSE 
+# FORWARD_N2 - INSERT_VIRUS - RT_PRIMER_N1 - BARCODE - REVERSE 
+# FORWARD_HUMAN - INSERT_HUMAN - RT_PRIMER_HUMAN - BARCODE - REVERSE 
+
+# FORWARD_N1 - INSERT_SPIKE - RT_PRIMER_N1 - BARCODE - REVERSE 
+# FORWARD_N2 - INSERT_SPIKE - RT_PRIMER_N1 - BARCODE - REVERSE 
+# FORWARD_HUMAN - INSERT_SPIKE - RT_PRIMER_HUMAN - BARCODE - REVERSE 
+
+# Tools required 
+# - flash 
+# - seqkit 
+# - Sabre 
+
+# Briefly 
+# - Snakemake take 2 fastq file (R1 and R2) from illumina MiSeq. 
+# - Paired end fastq are merged with flash to create a consensus sequence
+# - Reverse complement and trim to have barcode at the beginning 
+# - sample demultiplexing using Sabre 
+# - Count primers, viral insert, spike insert using a simple seqkit grep 
+# - Create stat files 
 
 
 def find_pair(folder):
@@ -16,7 +37,7 @@ def find_pair(folder):
 
     return R1,R2
 
-
+# 3 Runs has been made..  Run 190 contains 4 pools demultiplexed with 1 illumina index
 rule all:
     input:
         "191/stat.demux.txt",
